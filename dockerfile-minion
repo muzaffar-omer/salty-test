@@ -13,6 +13,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api telnet iputils-ping \
     # Configure the minions to contact the master using the "master" hostname instead of the default "salt" hostname
     && sed 's/#master: salt/master: master/' /etc/salt/minion > /etc/salt/minion.tmp \
-        && mv /etc/salt/minion.tmp /etc/salt/minion
+    && mv /etc/salt/minion.tmp /etc/salt/minion
         
 CMD [ "/usr/bin/salt-minion", "-l", "debug" ]
