@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  master:
+    container_name: master
+    build:
+      context: .
+      dockerfile: dockerfile-master
+    ports:
+      - "4505:4505"
+      - "4506:4506"
+  minion1:
+    container_name: minion1
+    build:
+      context: .
+      dockerfile: dockerfile-minion
+  minion2:
+    container_name: minion2
+    build:
+      context: .
+      dockerfile: dockerfile-minion
+  minion3:
+    container_name: minion3
+    build:
+      context: .
+      dockerfile: dockerfile-minion

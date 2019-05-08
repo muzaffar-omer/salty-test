@@ -1,0 +1,20 @@
+FROM ubuntu
+RUN apt -y update
+RUN apt -y upgrade
+RUN apt -y install wget
+RUN apt -y install gnupg
+RUN wget -q -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN echo 'deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list
+RUN apt -y update
+
+# tzdata package requires configuration of timezone, below Env variable will make the installation non-interactive
+# to disable the timezone configuration prompt
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt -y install telnet iputils-ping
+RUN apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api
+
+# Configure the minions to contact the master using the "master" hostname instead of the default "salt" hostname
+RUN sed 's/#master: salt/master: master/' /etc/salt/minion > /etc/salt/minion.tmp \
+        && mv /etc/salt/minion.tmp /etc/salt/minion
+        
+CMD [ "/usr/bin/salt-minion", "-l", "debug" ]
