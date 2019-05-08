@@ -7,7 +7,8 @@ SaltStack cluster with single ubuntu master connected to multiple ubuntu minions
 Clone the repository using `git clone` and run`docker-compose` inside the cloned repository to start up the environment as below
 
 ```Bash
-docker-compose up -d                                                                                                                                                         
+docker-compose up -d
+
 Creating minion3 ... done
 Creating master  ... done
 Creating minion1 ... done
@@ -35,12 +36,13 @@ salt '*' test.ping
 Output of the above command should be similar to the below
 
 ```bash
-root@70063dfb2997:/# salt '*' test.ping
-17a180641ffc:
+root@master:/# salt '*' test.ping
+minion2:
     True
-82c048bd821d:
+minion1:
     True
-3478130f3a2b:
+minion3:
     True
+root@master:/#
 ```
 

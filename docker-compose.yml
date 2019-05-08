@@ -2,6 +2,7 @@ version: "3.7"
 services:
   master:
     container_name: master
+    hostname: master
     build:
       context: .
       dockerfile: dockerfile-master
@@ -10,16 +11,19 @@ services:
       - "4506:4506"
   minion1:
     container_name: minion1
+    hostname: minion1
     build:
       context: .
       dockerfile: dockerfile-minion
   minion2:
     container_name: minion2
+    hostname: minion2
     build:
       context: .
       dockerfile: dockerfile-minion
   minion3:
     container_name: minion3
+    hostname: minion3
     build:
       context: .
       dockerfile: dockerfile-minion
