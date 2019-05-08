@@ -1,20 +1,18 @@
 FROM ubuntu
-RUN apt -y update
-RUN apt -y upgrade
-RUN apt -y install wget
-RUN apt -y install gnupg
-RUN wget -q -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-RUN echo 'deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list
-RUN apt -y update
+RUN apt -y update \
+    && apt -y upgrade \
+    && apt -y install wget \
+    && apt -y install gnupg \
+    && wget -q -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - \
+    && echo 'deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list \
+    && apt -y update
 
 # tzdata package requires configuration of timezone, below Env variable will make the installation non-interactive
 # to disable the timezone configuration prompt
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt -y install telnet iputils-ping
-RUN apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api
-
-# Configure the master to auto accept minion public keys
-RUN sed 's/#auto_accept: False/auto_accept: True/' /etc/salt/master > /etc/salt/master.tmp \
+RUN apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api telnet iputils-ping \
+    # Configure the master to auto accept minion public keys
+    && sed 's/#auto_accept: False/auto_accept: True/' /etc/salt/master > /etc/salt/master.tmp \
     && mv /etc/salt/master.tmp /etc/salt/master
     
 CMD [ "/usr/bin/salt-master" , "-l" , "debug" ]
