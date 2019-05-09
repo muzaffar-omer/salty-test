@@ -1,0 +1,10 @@
+FROM centos:7
+RUN yum -y install https://repo.saltstack.com/yum/redhat/salt-repo-latest.el7.noarch.rpm \
+    && yum -y update \
+    && yum -y clean expire-cache \
+    && yum -y install salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api \
+    # Configure the minions to contact the master using the "master" hostname instead of the default "salt" hostname
+    && sed 's/#master: salt/master: master/' /etc/salt/minion > /etc/salt/minion.tmp \
+    && mv -f /etc/salt/minion.tmp /etc/salt/minion
+
+CMD [ "/usr/bin/salt-minion", "-l", "debug" ]
