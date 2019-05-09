@@ -1,24 +1,22 @@
-FROM ubuntu
+FROM ubuntu:18.04
 RUN apt -y update \
-    && apt -y upgrade \
     && apt -y install wget \
     && apt -y install gnupg \
     && wget -q -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - \
-    && echo 'deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list \
-    && apt -y update
+    && echo 'deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list 
 
 # tzdata package requires configuration of timezone, below Env variable will make the installation non-interactive
 # to disable the timezone configuration prompt
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api telnet iputils-ping \
+RUN apt -y update && apt -y install salt-master salt-minion salt-ssh salt-cloud salt-api \
     # Configure the master to auto accept minion public keys
     && sed 's/#auto_accept: False/auto_accept: True/' /etc/salt/master > /etc/salt/master.tmp \
     && mv /etc/salt/master.tmp /etc/salt/master \
     # Update the master hostname in /etc/salt/minion to allow calling salt-call inside the master node 
     && sed 's/#master: salt/master: master/' /etc/salt/minion > /etc/salt/minion.tmp \
     && mv /etc/salt/minion.tmp /etc/salt/minion
-    
-CMD [ "/usr/bin/salt-master" , "-l" , "debug" ]
 
 # Start a minion daemon in the master node to allow calling the salt-call
-RUN salt-minion -l debug -d
+CMD /usr/bin/salt-master -l debug -d && /usr/bin/salt-minion -l debug -d && /usr/bin/tail -f /dev/null
+
+
