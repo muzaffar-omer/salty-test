@@ -37,12 +37,25 @@ Output of the above command should be similar to the below
 
 ```bash
 root@master:/# salt '*' test.ping
-minion2:
-    True
 minion1:
     True
+minion2:
+    True
 minion3:
+    True
+master:
     True
 root@master:/#
 ```
 
+
+
+## References
+
+* Salt Installation in Ubuntu : https://docs.saltstack.com/en/latest/topics/installation/ubuntu.html#ubuntu 
+
+* Running Salt https://docs.saltstack.com/en/latest/ref/configuration/index.html#running-salt
+
+* Configuring master node hostname in minion https://docs.saltstack.com/en/latest/ref/configuration/minion.html#master
+
+  
